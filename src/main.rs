@@ -1,7 +1,12 @@
+extern crate dotenv;
 use std::io::{self, Write};
+use dotenv::dotenv;
 mod weather;
 
-fn main() {
+#[tokio::main] 
+async fn main() {
+    // Load environment variables from .env file
+    dotenv().ok();
     loop {
         print!("Enter command: ");
         io::stdout().flush().unwrap();
@@ -15,17 +20,21 @@ fn main() {
             break;
         } 
 
-        process_command(command);
+        process_command(command).await;
     }
 }
 
-fn process_command(command: &str) {
+async fn process_command(command: &str) {
     // Split up command and arguments
     let mut parts = command.split_whitespace();
     let command = parts.next().unwrap();
     let args = parts;
+
     if command == "weather" {
-        weather::process_command(args);
+        match weather::process_command(args).await {
+            Ok(_) => println!("Weather information displayed successfully"),
+            Err(err) => println!("Error: {}", err),
+        }
     } else {
         println!("Usage: weather <city> <country>")
     }
