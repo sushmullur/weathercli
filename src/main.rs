@@ -2,6 +2,7 @@ extern crate dotenv;
 use std::io::{self, Write};
 use dotenv::dotenv;
 mod weather;
+mod help;
 
 #[tokio::main] 
 async fn main() {
@@ -35,7 +36,10 @@ async fn process_command(command: &str) {
             Ok(_) => println!("Weather information displayed successfully"),
             Err(err) => println!("Error: {}", err),
         }
-    } else {
+    } else if command == "help" {
+        help::process_command();
+    }
+    else {
         println!("Usage: weather <city> <country>")
     }
 }

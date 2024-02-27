@@ -20,10 +20,11 @@ pub async fn process_command(args: core::str::SplitWhitespace<'_>) -> Result<(),
             if let Some(obj) = data.as_object() {
                 let map: HashMap<String, Value> = obj.clone().into_iter().collect();
                 // Use the map as needed
-                let weather_data = map.get("list");
-                println!("{:?}", weather_data);
+                let weather_list = map.get("list");
+                let weather_object = weather_list.unwrap().as_array().unwrap();
+                println!("{:?}", weather_object[1].get("main"));
             } else {
-                println!("The received JSON is not an object.");
+                println!("Invalid response.");
             }
             
             Ok(())
