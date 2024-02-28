@@ -3,11 +3,14 @@ use std::io::{self, Write};
 use dotenv::dotenv;
 mod weather;
 mod help;
+mod convert;
 
 #[tokio::main] 
 async fn main() {
     // Load environment variables from .env file
     dotenv().ok();
+    println!("Usage: weather <city> <mode>");
+    println!("Enter \"help\" for more information regarding modes.");
     loop {
         print!("Enter command: ");
         io::stdout().flush().unwrap();
@@ -38,6 +41,8 @@ async fn process_command(command: &str) {
         }
     } else if command == "help" {
         help::process_command();
+    } else if command == "convert" {
+        convert::process_command(args);
     }
     else {
         println!("Usage: weather <city> <mode>")
