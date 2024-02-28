@@ -33,14 +33,14 @@ async fn process_command(command: &str) {
 
     if command == "weather" {
         match weather::process_command(args).await {
-            Ok(_) => println!("Weather information displayed successfully"),
+            Ok(_) => println!(""),
             Err(err) => println!("Error: {}", err),
         }
     } else if command == "help" {
         help::process_command();
     }
     else {
-        println!("Usage: weather <city> <country>")
+        println!("Usage: weather <city> <mode>")
     }
 }
  

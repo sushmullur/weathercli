@@ -6,10 +6,10 @@ extern crate reqwest;
 pub async fn process_command(args: core::str::SplitWhitespace<'_>) -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<&str> = args.collect();
     if args.len() != 2 {
-        println!("Usage: weather <city> <country>");
+        println!("Usage: weather <city> <mode>");
         return Ok(());
     }
-    println!("Getting weather for {}, {}", args[0], args[1]);
+    println!("Getting weather for {}", args[0]);
     let city_name = args[0].to_string();
     let result = request_api(city_name).await;
     match result {
