@@ -12,7 +12,6 @@ pub async fn process_command(args: core::str::SplitWhitespace<'_>) -> Result<(),
     println!("Getting weather for {}", args[0]);
     let city_name = args[0].to_string();
     let mode = args[1].to_string();
-    // TODO: Parse depending on mode
     let result = request_api(city_name).await;
     match result {
         Ok(body) => {
@@ -46,14 +45,18 @@ async fn request_api(city_name: String) -> Result<String, Box<dyn std::error::Er
     Ok(body)
 }
 
+// Mode 1 should display the current temperature and weather description.
 fn mode_one(map: HashMap<String, Value>) {
     let weather_object = map.get("list").unwrap().as_array().unwrap();
     let closest_forecast = &weather_object[0].as_object().unwrap();
     let closest_temperature_object = closest_forecast.get("main").unwrap().as_object().unwrap().get("temp");
+    let weather_description = closest_forecast.get("weather").unwrap().as_array().unwrap()[0].as_object().unwrap().get("description").unwrap().as_str().unwrap();
     let temp_value = match closest_temperature_object {
         Some(temp_value) => temp_value.as_f64().unwrap_or(0.0),
         None => 0.0,
     } - 273.15;
-    let temp_string = format!("The current temperature is {:.2} °C", temp_value);
+    let temp_string = format!("The current temperature is {:.2} °C.", temp_value);
+    let description_string = format!("The weather is currently: {}.", weather_description);
     println!("{}", temp_string);
+    println!("{}", description_string);
 }
